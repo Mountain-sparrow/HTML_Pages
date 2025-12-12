@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTMLHub - Your Creative Portfolio</title>
+    <meta name="description" content="A beautiful dashboard to store, preview, and share your HTML creations">
+    <meta property="og:title" content="HTMLHub - Creative Portfolio">
+    <meta property="og:description" content="Store, preview, and share HTML creations">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --bg-gradient-start: #000000;
+            --bg-gradient-mid: #0a1628;
+            --bg-gradient-end: #1e3a5f;
+            --accent-blue: #3b82f6;
+            --accent-blue-light: #60a5fa;
+            --accent-blue-bright: #2563eb;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-bg-hover: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-border-hover: rgba(255, 255, 255, 0.25);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --blob-blue: #4f8ef7;
+            --blob-purple: #7c5cfc;
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+        }
+
+        .cursor.hover {
+            transform: translate(-50%, -50%) scale(1.5);
+            background: rgba(59, 130, 246, 0.3);
+            border-color: var(--accent-blue);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                var(--bg-gradient-start) 0%, 
+                var(--bg-gradient-mid) 50%, 
+                var(--bg-gradient-end) 100%);
+            z-index: -3;
+        }
+
+        /* Floating Blobs */
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.6;
+            z-index: -2;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--blob-blue), var(--blob-purple));
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            bottom: -50px;
+            left: -100px;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, var(--blob-purple), #a855f7);
+            top: 40%;
+            right: 10%;
+            animation-delay: -10s;
+        }
+
+        .blob-4 {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #0ea5e9, var(--blob-blue));
+            bottom: 30%;
+            left: 5%;
+            animation-delay: -15s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(30px, -30px) rotate(5deg) scale(1.05); }
+            50% { transform: translate(-20px, 20px) rotate(-5deg) scale(0.95); }
+            75% { transform: translate(-30px, -20px) rotate(3deg) scale(1.02); }
+        }
+
+        /* Liquid Shapes */
+        .liquid-shape {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .liquid-shape-1 {
+            width: 180px;
+            height: 180px;
+            top: 15%;
+            left: -40px;
+            background: linear-gradient(135deg, rgba(79, 142, 247, 0.4), rgba(124, 92, 252, 0.2));
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: morph 15s ease-in-out infinite;
+        }
+
+        .liquid-shape-2 {
+            width: 120px;
+            height: 120px;
+            bottom: 20%;
+            right: -30px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(147, 51, 234, 0.2));
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: morph 12s ease-in-out infinite reverse;
+        }
+
+        @keyframes morph {
+            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            25% { border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%; }
+            50% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
+            75% { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
+        }
+
+        /* Glass */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--blob-purple));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Mode Badge */
+        .mode-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .mode-badge.admin {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .mode-badge.viewer {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue-light);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            cursor: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            text-transform: uppercase;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-blue-bright);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-glass:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+        }
+
+        .btn-icon {
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Admin Only Elements */
+        .admin-only {
+            display: none;
+        }
+
+        body.admin-mode .admin-only {
+            display: inline-flex;
+        }
+
+        body.admin-mode .viewer-only {
+            display: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            padding-top: 100px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 2rem 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--accent-blue-light);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 .highlight {
+            font-style: italic;
+            font-weight: 400;
+            background: linear-gradient(90deg, var(--accent-blue-light), #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            padding: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, var(--accent-blue-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            border-radius: 14px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            width: 300px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .search-box::before {
+            content: '⌕';
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .category-pill {
+            padding: 0.6rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            cursor: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .category-pill:hover,
+        .category-pill.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        }
+
+        .project-card:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px rgba(59, 130, 246, 0.2);
+        }
+
+        .project-preview {
+            position: relative;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+            overflow: hidden;
+        }
+
+        .project-preview iframe {
+            width: 200%;
+            height: 200%;
+            transform: scale(0.5);
+            transform-origin: top left;
+            border: none;
+            pointer-events: none;
+        }
+
+        .project-preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8) 100%);
+            opacity: 0;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .project-card:hover .project-preview-overlay {
+            opacity: 1;
+        }
+
+        .preview-btn {
+            padding: 0.6rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .project-info {
+            padding: 1.5rem;
+        }
+
+        .project-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.3px;
+        }
+
+        .project-title input {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.15rem;
+            font-weight: 600;
+            width: 100%;
+            padding: 0.25rem 0;
+            cursor: none;
+        }
+
+        .project-title input:disabled {
+            opacity: 1;
+        }
+
+        body.admin-mode .project-title input {
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        body.admin-mode .project-title input:focus {
+            outline: none;
+            background: rgba(255,255,255,0.05);
+            padding: 0.25rem 0.5rem;
+        }
+
+        .project-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .project-tag {
+            padding: 0.3rem 0.75rem;
+            background: rgba(59, 130, 246, 0.15);
+            border-radius: 100px;
+            font-size: 0.7rem;
+            color: var(--accent-blue-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.7rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Add Card - Admin Only */
+        .add-project-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 2px dashed var(--glass-border);
+            border-radius: 24px;
+            min-height: 380px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.admin-mode .add-project-card {
+            display: flex;
+        }
+
+        .add-project-card:hover {
+            border-color: var(--accent-blue);
+            background: var(--glass-bg-hover);
+            transform: translateY(-4px);
+        }
+
+        .add-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--blob-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+        }
+
+        .add-project-card h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .add-project-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Empty State for Viewers */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state p {
+            color: var(--text-muted);
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            border-radius: 28px;
+            border: 1px solid var(--glass-border);
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.75rem 2rem;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+            cursor: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            overflow-y: auto;
+            max-height: calc(90vh - 160px);
+        }
+
+        .form-group {
+            margin-bottom: 1.75rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border-radius: 14px;
+            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea {
+            min-height: 280px;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Preview Modal */
+        .preview-modal .modal {
+            max-width: 1200px;
+            height: 90vh;
+        }
+
+        .preview-modal .modal-body {
+            padding: 0;
+            height: calc(90vh - 80px);
+            background: #fff;
+        }
+
+        .preview-modal iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Login Modal */
+        .login-modal .modal {
+            max-width: 420px;
+        }
+
+        .login-info {
+            padding: 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+
+        ::selection { background: rgba(59, 130, 246, 0.4); color: white; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .stats { gap: 2rem; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .navbar { padding: 1rem; }
+            .search-box input { width: 100%; }
+            .section-header { flex-direction: column; align-items: stretch; }
+            .cursor, .cursor-dot { display: none; }
+            * { cursor: auto; }
+        }
+
+        /* Data indicator */
+        .data-source {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <!-- Background -->
+    <div class="bg-gradient"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+    <div class="liquid-shape liquid-shape-1"></div>
+    <div class="liquid-shape liquid-shape-2"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">⚡</div>
+            HTMLHub
+        </div>
+        <div class="nav-actions">
+            <span class="mode-badge viewer viewer-only">👁 Viewer</span>
+            <span class="mode-badge admin admin-only">🔐 Admin</span>
+            
+            <button class="btn btn-glass btn-icon admin-only" onclick="exportProjects()" title="Export">📤</button>
+            <button class="btn btn-glass btn-icon admin-only" onclick="document.getElementById('importFile').click()" title="Import">📥</button>
+            <input type="file" id="importFile" accept=".json" style="display: none" onchange="importProjects(event)">
+            
+            <button class="btn btn-glass btn-sm viewer-only" onclick="openLoginModal()">🔐 Admin</button>
+            <button class="btn btn-glass btn-sm admin-only" onclick="logout()">Logout</button>
+            <button class="btn btn-primary admin-only" onclick="openAddModal()">
+                <span>+</span> New
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-badge">✨ Creative Studio + Lab</div>
+            <h1>Let's get<br><span class="highlight">creative.</span></h1>
+            <p>Store, preview, and share your HTML creations through a beautiful dashboard.</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="totalProjects">0</div>
+                    <div class="stat-label">Projects</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="totalViews">0</div>
+                    <div class="stat-label">Views</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="totalShares">0</div>
+                    <div class="stat-label">Shares</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard -->
+        <section class="dashboard">
+            <div class="section-header">
+                <h2 class="section-title">Projects</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search projects..." oninput="filterProjects()">
+                </div>
+            </div>
+
+            <div class="categories" id="categoriesContainer">
+                <button class="category-pill active" onclick="filterByCategory('all')">All</button>
+            </div>
+
+            <div class="projects-grid" id="projectsGrid"></div>
+        </section>
+    </main>
+
+    <!-- Data Source Indicator -->
+    <div class="data-source" id="dataSource">Local Storage</div>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal-overlay" id="addModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Project</h2>
+                <button class="modal-close" onclick="closeAddModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" id="projectName" placeholder="My Awesome Project">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" id="projectCategory" placeholder="landing, portfolio, dashboard">
+                </div>
+                <div class="form-group">
+                    <label>HTML Code</label>
+                    <textarea id="projectCode" placeholder="Paste your HTML code here..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-glass" onclick="closeAddModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProject()">Save Project</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal-overlay preview-modal" id="previewModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="previewTitle">Preview</h2>
+                <button class="modal-close" onclick="closePreviewModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <iframe id="previewFrame"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal-overlay" id="shareModal">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Share Project</h2>
+                <button class="modal-close" onclick="closeShareModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Choose how to share this creation.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <button class="btn btn-glass" onclick="downloadProject()" style="justify-content: center; width: 100%;">
+                        📄 Download HTML
+                    </button>
+                    <button class="btn btn-glass" onclick="copyProjectCode()" style="justify-content: center; width: 100%;">
+                        📋 Copy Code
+                    </button>
+                    <button class="btn btn-primary" onclick="openInNewTab()" style="justify-content: center; width: 100%;">
+                        🌐 Open in Browser
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal" style="max-width: 420px;">
+            <div class="modal-header">
+                <h2>Delete Project</h2>
+                <button class="modal-close" onclick="closeDeleteModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-secondary);">
+                    Delete "<span id="deleteProjectName" style="color: var(--text-primary);"></span>"? This cannot be undone.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-glass" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay login-modal" id="loginModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>🔐 Admin Access</h2>
+                <button class="modal-close" onclick="closeLoginModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="login-info">
+                    Enter your admin key to unlock editing features. Viewers can only preview and download projects.
+                </div>
+                <div class="form-group">
+                    <label>Admin Key</label>
+                    <input type="password" id="adminKey" placeholder="Enter admin key..." onkeypress="if(event.key==='Enter')login()">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-glass" onclick="closeLoginModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="login()">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ==========================================
+        // CONFIGURATION - CHANGE THESE VALUES
+        // ==========================================
+        
+        // Your secret admin key - CHANGE THIS!
+        const ADMIN_KEY = 'sai2025';
+        
+        // Pre-loaded projects (these will show for everyone)
+        // Add your projects here before deploying
+        const DEFAULT_PROJECTS = [
+            // Example project - remove or replace with your own
+            {
+                id: 'demo1',
+                name: 'Welcome Demo',
+                category: 'demo',
+                code: `<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        h1 { font-size: 3rem; margin-bottom: 1rem; }
+        p { font-size: 1.25rem; opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>👋 Welcome to HTMLHub</h1>
+        <p>This is a demo project. Add your own HTML creations!</p>
+    </div>
+</body>
+</html>`,
+                views: 0,
+                shares: 0,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            }
+        ];
+
+        // ==========================================
+        // APP STATE
+        // ==========================================
+        
+        let projects = [];
+        let isAdmin = false;
+        let currentEditId = null;
+        let currentShareId = null;
+        let currentDeleteId = null;
+        let activeCategory = 'all';
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for admin session
+            isAdmin = sessionStorage.getItem('htmlhub_admin') === 'true';
+            if (isAdmin) {
+                document.body.classList.add('admin-mode');
+            }
+
+            // Load projects
+            loadProjects();
+            renderProjects();
+            updateStats();
+            renderCategories();
+            initCursor();
+        });
+
+        function loadProjects() {
+            // Try to load from localStorage first
+            const stored = localStorage.getItem('htmlhub_projects');
+            if (stored) {
+                projects = JSON.parse(stored);
+            } else {
+                // Use default projects
+                projects = [...DEFAULT_PROJECTS];
+                saveToStorage();
+            }
+        }
+
+        // ==========================================
+        // CURSOR
+        // ==========================================
+        
+        function initCursor() {
+            const cursor = document.querySelector('.cursor');
+            const cursorDot = document.querySelector('.cursor-dot');
+
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
+            });
+
+            addCursorListeners();
+        }
+
+        function addCursorListeners() {
+            const cursor = document.querySelector('.cursor');
+            document.querySelectorAll('button, input, a, .project-card, .add-project-card, .category-pill').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        }
+
+        // ==========================================
+        // AUTH
+        // ==========================================
+        
+        function openLoginModal() {
+            document.getElementById('adminKey').value = '';
+            document.getElementById('loginModal').classList.add('active');
+            setTimeout(() => document.getElementById('adminKey').focus(), 100);
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        function login() {
+            const key = document.getElementById('adminKey').value;
+            if (key === ADMIN_KEY) {
+                isAdmin = true;
+                sessionStorage.setItem('htmlhub_admin', 'true');
+                document.body.classList.add('admin-mode');
+                closeLoginModal();
+                renderProjects();
+                showToast('Admin mode activated!', 'success');
+            } else {
+                showToast('Invalid admin key', 'error');
+            }
+        }
+
+        function logout() {
+            isAdmin = false;
+            sessionStorage.removeItem('htmlhub_admin');
+            document.body.classList.remove('admin-mode');
+            renderProjects();
+            showToast('Logged out', 'success');
+        }
+
+        // ==========================================
+        // STORAGE
+        // ==========================================
+        
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('htmlhub_projects', JSON.stringify(projects));
+            updateStats();
+            renderCategories();
+        }
+
+        function updateStats() {
+            document.getElementById('totalProjects').textContent = projects.length;
+            document.getElementById('totalViews').textContent = projects.reduce((sum, p) => sum + (p.views || 0), 0);
+            document.getElementById('totalShares').textContent = projects.reduce((sum, p) => sum + (p.shares || 0), 0);
+        }
+
+        // ==========================================
+        // CATEGORIES
+        // ==========================================
+        
+        function renderCategories() {
+            const categories = new Set();
+            projects.forEach(p => {
+                if (p.category) categories.add(p.category.toLowerCase());
+            });
+            
+            const container = document.getElementById('categoriesContainer');
+            container.innerHTML = `
+                <button class="category-pill ${activeCategory === 'all' ? 'active' : ''}" onclick="filterByCategory('all')">All</button>
+                ${[...categories].map(cat => `
+                    <button class="category-pill ${activeCategory === cat ? 'active' : ''}" onclick="filterByCategory('${cat}')">${cat}</button>
+                `).join('')}
+            `;
+            addCursorListeners();
+        }
+
+        function filterByCategory(category) {
+            activeCategory = category;
+            renderCategories();
+            if (category === 'all') {
+                renderProjects();
+            } else {
+                renderProjects(projects.filter(p => p.category?.toLowerCase() === category));
+            }
+        }
+
+        function filterProjects() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            if (!query) {
+                renderProjects();
+                return;
+            }
+            renderProjects(projects.filter(p => 
+                p.name.toLowerCase().includes(query) ||
+                p.category?.toLowerCase().includes(query)
+            ));
+        }
+
+        // ==========================================
+        // RENDER
+        // ==========================================
+        
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        function formatDate(dateStr) {
+            return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function renderProjects(filtered = null) {
+            const grid = document.getElementById('projectsGrid');
+            const list = filtered || projects;
+
+            if (list.length === 0) {
+                grid.innerHTML = isAdmin ? `
+                    <div class="add-project-card" onclick="openAddModal()">
+                        <div class="add-icon">+</div>
+                        <h3>Create Your First Project</h3>
+                        <p>Click to add an HTML project</p>
+                    </div>
+                ` : `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <h3>No Projects Yet</h3>
+                        <p>Check back later for new creations!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = list.map(project => `
+                <div class="project-card" data-id="${project.id}">
+                    <div class="project-preview">
+                        <iframe srcdoc="${escapeHtml(project.code)}" sandbox="allow-scripts"></iframe>
+                        <div class="project-preview-overlay">
+                            <button class="btn btn-primary preview-btn" onclick="previewProject('${project.id}')">Preview</button>
+                            <button class="btn btn-glass preview-btn admin-only" onclick="editProject('${project.id}')">Edit</button>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-title">
+                            <input type="text" value="${escapeHtml(project.name)}" 
+                                   ${isAdmin ? `onchange="updateProjectName('${project.id}', this.value)"` : 'disabled'}
+                                   onclick="event.stopPropagation()">
+                        </div>
+                        <div class="project-meta">
+                            <span>📅 ${formatDate(project.updatedAt || project.createdAt)}</span>
+                            <span>👁 ${project.views || 0}</span>
+                            ${project.category ? `<span class="project-tag">${project.category}</span>` : ''}
+                        </div>
+                        <div class="project-actions">
+                            <button class="btn btn-glass action-btn" onclick="shareProject('${project.id}')">Share</button>
+                            <button class="btn btn-glass action-btn admin-only" onclick="duplicateProject('${project.id}')">📋</button>
+                            <button class="btn btn-glass action-btn admin-only" onclick="openDeleteModal('${project.id}')">🗑</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') + (isAdmin ? `
+                <div class="add-project-card" onclick="openAddModal()">
+                    <div class="add-icon">+</div>
+                    <h3>Add Project</h3>
+                    <p>Click to add more</p>
+                </div>
+            ` : '');
+
+            addCursorListeners();
+        }
+
+        // ==========================================
+        // CRUD OPERATIONS
+        // ==========================================
+        
+        function openAddModal() {
+            if (!isAdmin) return;
+            currentEditId = null;
+            document.getElementById('modalTitle').textContent = 'Add New Project';
+            document.getElementById('projectName').value = '';
+            document.getElementById('projectCategory').value = '';
+            document.getElementById('projectCode').value = '';
+            document.getElementById('addModal').classList.add('active');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.remove('active');
+            currentEditId = null;
+        }
+
+        function editProject(id) {
+            if (!isAdmin) return;
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            currentEditId = id;
+            document.getElementById('modalTitle').textContent = 'Edit Project';
+            document.getElementById('projectName').value = project.name;
+            document.getElementById('projectCategory').value = project.category || '';
+            document.getElementById('projectCode').value = project.code;
+            document.getElementById('addModal').classList.add('active');
+        }
+
+        function saveProject() {
+            if (!isAdmin) return;
+            
+            const name = document.getElementById('projectName').value.trim() || 'Untitled Project';
+            const category = document.getElementById('projectCategory').value.trim();
+            const code = document.getElementById('projectCode').value;
+
+            if (!code) {
+                showToast('Please enter HTML code', 'error');
+                return;
+            }
+
+            if (currentEditId) {
+                const index = projects.findIndex(p => p.id === currentEditId);
+                if (index !== -1) {
+                    projects[index] = { ...projects[index], name, category, code, updatedAt: new Date().toISOString() };
+                }
+                showToast('Project updated!', 'success');
+            } else {
+                projects.unshift({
+                    id: generateId(),
+                    name,
+                    category,
+                    code,
+                    views: 0,
+                    shares: 0,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+                showToast('Project created!', 'success');
+            }
+
+            saveToStorage();
+            renderProjects();
+            closeAddModal();
+        }
+
+        function updateProjectName(id, newName) {
+            if (!isAdmin) return;
+            const index = projects.findIndex(p => p.id === id);
+            if (index !== -1) {
+                projects[index].name = newName || 'Untitled Project';
+                projects[index].updatedAt = new Date().toISOString();
+                saveToStorage();
+            }
+        }
+
+        function duplicateProject(id) {
+            if (!isAdmin) return;
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            projects.unshift({
+                ...project,
+                id: generateId(),
+                name: `${project.name} (Copy)`,
+                views: 0,
+                shares: 0,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            });
+
+            saveToStorage();
+            renderProjects();
+            showToast('Duplicated!', 'success');
+        }
+
+        function openDeleteModal(id) {
+            if (!isAdmin) return;
+            currentDeleteId = id;
+            const project = projects.find(p => p.id === id);
+            document.getElementById('deleteProjectName').textContent = project?.name || '';
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            currentDeleteId = null;
+        }
+
+        function confirmDelete() {
+            if (!isAdmin) return;
+            projects = projects.filter(p => p.id !== currentDeleteId);
+            saveToStorage();
+            renderProjects();
+            closeDeleteModal();
+            showToast('Deleted', 'success');
+        }
+
+        // ==========================================
+        // PREVIEW & SHARE
+        // ==========================================
+        
+        function previewProject(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            project.views = (project.views || 0) + 1;
+            saveToStorage();
+
+            document.getElementById('previewTitle').textContent = project.name;
+            document.getElementById('previewFrame').srcdoc = project.code;
+            document.getElementById('previewModal').classList.add('active');
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').classList.remove('active');
+            document.getElementById('previewFrame').srcdoc = '';
+        }
+
+        function shareProject(id) {
+            currentShareId = id;
+            const project = projects.find(p => p.id === id);
+            if (project) {
+                project.shares = (project.shares || 0) + 1;
+                saveToStorage();
+            }
+            document.getElementById('shareModal').classList.add('active');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('active');
+            currentShareId = null;
+        }
+
+        function downloadProject() {
+            const project = projects.find(p => p.id === currentShareId);
+            if (!project) return;
+
+            const blob = new Blob([project.code], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${project.name.replace(/[^a-z0-9]/gi, '_')}.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Downloaded!', 'success');
+        }
+
+        function copyProjectCode() {
+            const project = projects.find(p => p.id === currentShareId);
+            if (!project) return;
+
+            navigator.clipboard.writeText(project.code).then(() => {
+                showToast('Copied!', 'success');
+            });
+        }
+
+        function openInNewTab() {
+            const project = projects.find(p => p.id === currentShareId);
+            if (!project) return;
+
+            const blob = new Blob([project.code], { type: 'text/html' });
+            window.open(URL.createObjectURL(blob), '_blank');
+        }
+
+        // ==========================================
+        // IMPORT/EXPORT
+        // ==========================================
+        
+        function exportProjects() {
+            if (!isAdmin) return;
+            const blob = new Blob([JSON.stringify(projects, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `htmlhub_backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            showToast('Exported!', 'success');
+        }
+
+        function importProjects(event) {
+            if (!isAdmin) return;
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        const newProjects = imported.map(p => ({
+                            ...p,
+                            id: generateId(),
+                            createdAt: p.createdAt || new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        }));
+                        projects = [...newProjects, ...projects];
+                        saveToStorage();
+                        renderProjects();
+                        showToast(`Imported ${newProjects.length} projects!`, 'success');
+                    }
+                } catch (err) {
+                    showToast('Invalid file', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ==========================================
+        // TOAST
+        // ==========================================
+        
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span>${type === 'success' ? '✓' : '✕'}</span><span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.4s ease';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // ==========================================
+        // KEYBOARD SHORTCUTS
+        // ==========================================
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAddModal();
+                closePreviewModal();
+                closeShareModal();
+                closeDeleteModal();
+                closeLoginModal();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n' && isAdmin) {
+                e.preventDefault();
+                openAddModal();
+            }
+        });
+    </script>
+</body>
+</html>
