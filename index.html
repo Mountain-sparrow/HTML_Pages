@@ -2509,4 +2509,14 @@ blending logic, creativity, and self-awareness </p>
                 closeAddModal();
                 closePreviewModal();
                 closeShareModal();
-                closeDelet
+                closeDeleteModal();
+                closeLoginModal();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n' && isAdmin) {
+                e.preventDefault();
+                openAddModal();
+            }
+        });
+    </script>
+</body>
+</html>
