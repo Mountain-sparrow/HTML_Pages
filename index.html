@@ -1077,6 +1077,418 @@
             letter-spacing: 1px;
             z-index: 100;
         }
+
+        /* ==========================================
+           ABOUT ME SECTION
+        ========================================== */
+        .about-section {
+            padding: 6rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .about-header .section-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: float-gentle 3s ease-in-out infinite;
+        }
+
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .about-header h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(64, 224, 208, 0.3), transparent);
+        }
+
+        .about-text {
+            font-size: 1.05rem;
+            font-weight: 300;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        /* Quote Section */
+        .quote-section {
+            margin-top: 3rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .quote-container {
+            position: relative;
+            padding: 2rem;
+        }
+
+        .quote-mark {
+            position: absolute;
+            font-size: 4rem;
+            color: var(--accent-cyan);
+            opacity: 0.2;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .quote-mark.open {
+            top: 0;
+            left: 1rem;
+        }
+
+        .quote-mark.close {
+            bottom: 0;
+            right: 1rem;
+        }
+
+        .quote-text {
+            font-size: 1.15rem;
+            font-style: italic;
+            font-weight: 400;
+            color: var(--text-primary);
+            line-height: 1.7;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue-light), #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ==========================================
+           CONTACT SECTION
+        ========================================== */
+        .contact-section {
+            padding: 4rem 2rem 6rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .contact-header .section-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .contact-header h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .about-content {
+                padding: 2rem;
+            }
+        }
+
+        /* Contact Info Card */
+        .contact-info-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-info-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .contact-item-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--blob-purple));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .contact-item-content {
+            flex: 1;
+        }
+
+        .contact-item-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-item-value {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .contact-item-value a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item-value a:hover {
+            color: var(--accent-cyan);
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: none;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: #0077b5;
+            border-color: #0077b5;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 119, 181, 0.3);
+        }
+
+        .social-link svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-primary);
+            transition: fill 0.3s ease;
+        }
+
+        .social-link:hover svg {
+            fill: white;
+        }
+
+        /* Contact Form Card */
+        .contact-form-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+        }
+
+        .contact-form-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 0;
+        }
+
+        .contact-form .form-group label {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-form .form-group input,
+        .contact-form .form-group textarea {
+            padding: 0.875rem 1rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-form .form-group textarea {
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .contact-form .btn-primary {
+            width: 100%;
+            justify-content: center;
+            padding: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .form-success.show {
+            display: block;
+        }
+
+        .form-success-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-success h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-success p {
+            color: var(--text-muted);
+        }
+
+        /* ==========================================
+           FOOTER
+        ========================================== */
+        .footer {
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-logo .logo-icon-small {
+            width: 32px;
+            height: 32px;
+            background: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+        }
+
+        .footer-logo .logo-icon-small svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .footer-text span {
+            color: var(--accent-cyan);
+        }
+
+        /* Divider */
+        .section-divider {
+            width: 100%;
+            max-width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -1231,6 +1643,147 @@ blending logic, creativity, and self-awareness </p>
 
             <div class="projects-grid" id="projectsGrid"></div>
         </section>
+
+        <!-- Divider -->
+        <div class="section-divider"></div>
+
+        <!-- About Me Section -->
+        <section class="about-section">
+            <div class="about-header">
+                <span class="section-icon">☕</span>
+                <h2>Wanna know more about me?</h2>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <p>I'm someone who enjoys sitting at the intersection of logic and meaning. By profession, I work with numbers and systems, but by nature, I'm deeply curious about how ideas form, evolve, and influence the way we think and live.</p>
+                    
+                    <p>I like exploring concepts—whether they come from science, finance, data, AI, philosophy, spirituality, or psychology—and breaking them down until they make sense. Books that make you pause mid-page, music that blends into late-evening thinking, and conversations that go a layer deeper than usual tend to stay with me.</p>
+                    
+                    <p>You'll often find me reflecting on Telugu literature, journaling raw thoughts, experimenting with tech and AI, or quietly enjoying a cup of coffee while connecting dots between unrelated ideas. I believe meaningful thinking doesn't always need conclusions—sometimes it just needs space.</p>
+                    
+                    <p>Outside of personal exploration, I'm an active volunteer with an NGO focused on education, where giving back feels less like responsibility and more like alignment. It's a reminder that even small, consistent efforts can create lasting impact.</p>
+                    
+                    <p>This space is my thinking laboratory—a place where curiosity leads, structure supports, and consciousness stays at the core.</p>
+                </div>
+
+                <div class="quote-section">
+                    <div class="quote-container">
+                        <span class="quote-mark open">"</span>
+                        <p class="quote-text">If something here resonates, you're already part of the conversation.</p>
+                        <span class="quote-mark close">"</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section">
+            <div class="contact-header">
+                <span class="section-icon">✦</span>
+                <h2>Let's Connect</h2>
+                <p>Have a thought to share, a question to ask, or just want to say hello?</p>
+            </div>
+
+            <div class="contact-grid">
+                <!-- Contact Info -->
+                <div class="contact-info-card">
+                    <h3>📬 Get in Touch</h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-item-icon">📧</div>
+                        <div class="contact-item-content">
+                            <div class="contact-item-label">Email</div>
+                            <div class="contact-item-value">
+                                <a href="mailto:reddysainath286@gmail.com">reddysainath286@gmail.com</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon">📱</div>
+                        <div class="contact-item-content">
+                            <div class="contact-item-label">Mobile</div>
+                            <div class="contact-item-value">
+                                <a href="tel:+919177048939">+91 - 91770 48939</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/sainath-reddy-b32526120" target="_blank" rel="noopener noreferrer" class="social-link" title="Connect on LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="contact-form-card">
+                    <h3>💬 Send a Message</h3>
+                    
+                    <form class="contact-form" id="contactForm" action="https://formsubmit.co/reddysainath286@gmail.com" method="POST">
+                        <input type="hidden" name="_subject" value="New message from The Conscious Algorithm!">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_template" value="table">
+                        
+                        <div class="form-group">
+                            <label>Your Name</label>
+                            <input type="text" name="name" placeholder="What should I call you?" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Your Email</label>
+                            <input type="email" name="email" placeholder="Where can I reach you?" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Your Message</label>
+                            <textarea name="message" placeholder="What's on your mind?" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            Send Message ✨
+                        </button>
+                    </form>
+
+                    <div class="form-success" id="formSuccess">
+                        <div class="form-success-icon">✨</div>
+                        <h4>Message Sent!</h4>
+                        <p>Thanks for reaching out. I'll get back to you soon.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon-small">
+                        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                            <g class="heart-icon">
+                                <path d="M32 12 C28 4, 18 4, 18 12 C18 18, 32 24, 32 24 C32 24, 46 18, 46 12 C46 4, 36 4, 32 12Z" 
+                                      fill="none" stroke="#40E0D0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </g>
+                            <g class="plant-icon">
+                                <path d="M32 24 L32 30" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M32 27 C28 25, 26 28, 28 31" fill="none" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M32 27 C36 25, 38 28, 36 31" fill="none" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round"/>
+                            </g>
+                            <path d="M20 32 L20 44 C20 50, 26 54, 32 54 C38 54, 44 50, 44 44 L44 32" fill="none" stroke="#1a1a2e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M27 44 C29 46, 35 46, 37 44" fill="none" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M29 54 L29 58 L35 58 L35 54" fill="none" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M29 58 L22 62 M35 58 L42 62" fill="none" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M29 58 L32 62 L35 58" fill="none" stroke="#1a1a2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    The Conscious Algorithm
+                </div>
+                <p class="footer-text">Made with <span>♥</span> and a cup of coffee</p>
+            </div>
+        </footer>
     </main>
 
     <!-- Data Source Indicator -->
@@ -1475,7 +2028,7 @@ blending logic, creativity, and self-awareness </p>
 
         function addCursorListeners() {
             const cursor = document.querySelector('.cursor');
-            document.querySelectorAll('button, input, a, .project-card, .add-project-card, .category-pill').forEach(el => {
+            document.querySelectorAll('button, input, textarea, a, .project-card, .add-project-card, .category-pill, .social-link, .contact-item').forEach(el => {
                 el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
                 el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
             });
