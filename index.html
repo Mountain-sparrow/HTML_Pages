@@ -975,22 +975,37 @@
             gap: 1rem;
         }
 
-        /* Preview Modal */
+        /* ==========================================
+           FULL-SCREEN PREVIEW MODAL - FIXED!
+        ========================================== */
         .preview-modal .modal {
-            max-width: 1200px;
-            height: 90vh;
+            max-width: 95vw;
+            width: 95vw;
+            height: 95vh;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-modal .modal-header {
+            flex-shrink: 0;
+            padding: 1rem 1.5rem;
         }
 
         .preview-modal .modal-body {
+            flex: 1;
             padding: 0;
-            height: calc(90vh - 80px);
+            max-height: none;
+            overflow: hidden;
             background: #fff;
+            border-radius: 0 0 28px 28px;
         }
 
         .preview-modal iframe {
             width: 100%;
             height: 100%;
             border: none;
+            display: block;
         }
 
         /* Login Modal */
@@ -1060,6 +1075,19 @@
             .cursor, .cursor-dot { display: none; }
             * { cursor: auto; }
             .logo { font-size: 1.1rem; }
+            
+            /* Full-screen modal on mobile */
+            .preview-modal .modal {
+                width: 100vw;
+                height: 100vh;
+                max-width: 100vw;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+            
+            .preview-modal .modal-body {
+                border-radius: 0;
+            }
         }
 
         /* Data indicator */
@@ -1695,7 +1723,7 @@ blending logic, creativity, and self-awareness </p>
                         <div class="contact-item-content">
                             <div class="contact-item-label">Email</div>
                             <div class="contact-item-value">
-                                <a href="mailto:reddysainath286@gmail.com">reddysainath286@gmail.com</a>
+                                <a href="/cdn-cgi/l/email-protection#cebcabaaaab7bdafa7a0afbaa6fcf6f88ea9a3afa7a2e0ada1a3"><span class="__cf_email__" data-cfemail="9deff8f9f9e4eefcf4f3fce9f5afa5abddfaf0fcf4f1b3fef2f0">[email&#160;protected]</span></a>
                             </div>
                         </div>
                     </div>
@@ -1908,44 +1936,26 @@ blending logic, creativity, and self-awareness </p>
         
         const ADMIN_KEY = 'sai2025';
         
-        const DEFAULT_PROJECTS = [
-            {
-                id: 'demo1',
-                name: 'Welcome Demo',
-                category: 'demo',
-                code: `<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: -apple-system, sans-serif;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-        }
-        h1 { font-size: 3rem; margin-bottom: 1rem; }
-        p { font-size: 1.25rem; opacity: 0.9; }
-    </style>
-</head>
-<body>
-    <div>
-        <h1>👋 Welcome</h1>
-        <p>This is a demo project. Add your own HTML creations!</p>
-    </div>
-</body>
-</html>`,
-                views: 0,
-                shares: 0,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            }
+        // ==========================================
+        // 📁 LINKED PROJECTS - ADD YOUR HTML FILES HERE!
+        // ==========================================
+        // Just add entries to this array with:
+        //   - file: the filename (must be in same folder as index.html)
+        //   - name: display name for the card
+        //   - category: for filtering (e.g., 'psychology', 'ml concepts', etc.)
+        //
+        // Example: { file: 'my-project.html', name: 'My Cool Project', category: 'demo' }
+        // ==========================================
+        
+        const LINKED_PROJECTS = [
+            { file: 'agrippa.html', name: "Agrippa's Trilemma", category: 'psychology' },
+            { file: 'random-forest.html', name: 'Random Forest', category: 'ml concepts' },
+            // Add more projects here! Just follow the pattern above.
+            // { file: 'your-file.html', name: 'Your Project Name', category: 'your-category' },
         ];
+
+        // Fallback demo if no linked projects exist yet
+        const DEFAULT_PROJECTS = [];
 
         // ==========================================
         // ANIMATED WORDS
@@ -1985,26 +1995,63 @@ blending logic, creativity, and self-awareness </p>
         // INITIALIZATION
         // ==========================================
         
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             isAdmin = sessionStorage.getItem('htmlhub_admin') === 'true';
             if (isAdmin) {
                 document.body.classList.add('admin-mode');
             }
 
-            loadProjects();
+            await loadProjects();
             renderProjects();
             updateStats();
             renderCategories();
             initCursor();
         });
 
-        function loadProjects() {
+        async function loadProjects() {
+            // First, load linked HTML files from the repo
+            const linkedProjects = [];
+            
+            for (const item of LINKED_PROJECTS) {
+                try {
+                    const response = await fetch(item.file);
+                    if (response.ok) {
+                        const code = await response.text();
+                        linkedProjects.push({
+                            id: item.file.replace('.html', ''),
+                            name: item.name,
+                            category: item.category,
+                            code: code,
+                            file: item.file, // Keep reference to original file
+                            isLinked: true,  // Mark as linked (not editable)
+                            views: 0,
+                            shares: 0,
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        });
+                    } else {
+                        console.warn(`Could not load: ${item.file}`);
+                    }
+                } catch (err) {
+                    console.warn(`Error loading ${item.file}:`, err);
+                }
+            }
+            
+            // Merge with any localStorage projects (admin additions)
             const stored = localStorage.getItem('htmlhub_projects');
-            if (stored) {
-                projects = JSON.parse(stored);
-            } else {
+            const localProjects = stored ? JSON.parse(stored) : [];
+            
+            // Filter out local projects that have same ID as linked ones
+            const uniqueLocalProjects = localProjects.filter(
+                lp => !linkedProjects.find(p => p.id === lp.id)
+            );
+            
+            // Linked projects first, then local additions
+            projects = [...linkedProjects, ...uniqueLocalProjects];
+            
+            // If no projects at all, use defaults
+            if (projects.length === 0) {
                 projects = [...DEFAULT_PROJECTS];
-                saveToStorage();
             }
         }
 
@@ -2462,14 +2509,4 @@ blending logic, creativity, and self-awareness </p>
                 closeAddModal();
                 closePreviewModal();
                 closeShareModal();
-                closeDeleteModal();
-                closeLoginModal();
-            }
-            if ((e.ctrlKey || e.metaKey) && e.key === 'n' && isAdmin) {
-                e.preventDefault();
-                openAddModal();
-            }
-        });
-    </script>
-</body>
-</html>
+                closeDelet
