@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTMLHub - Your Creative Portfolio</title>
+    <title>The Conscious Algorithm - Creative Space</title>
     <meta name="description" content="A beautiful dashboard to store, preview, and share your HTML creations">
-    <meta property="og:title" content="HTMLHub - Creative Portfolio">
+    <meta property="og:title" content="The Conscious Algorithm - Creative Space">
     <meta property="og:description" content="Store, preview, and share HTML creations">
     <meta property="og:type" content="website">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,6 +19,7 @@
             --accent-blue: #3b82f6;
             --accent-blue-light: #60a5fa;
             --accent-blue-bright: #2563eb;
+            --accent-cyan: #40E0D0;
             --glass-bg: rgba(255, 255, 255, 0.08);
             --glass-bg-hover: rgba(255, 255, 255, 0.12);
             --glass-border: rgba(255, 255, 255, 0.15);
@@ -221,21 +222,75 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             font-weight: 700;
             letter-spacing: -0.5px;
         }
 
+        /* Animated Logo */
         .logo-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--blob-purple));
+            width: 52px;
+            height: 52px;
+            background: #ffffff;
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 32px rgba(64, 224, 208, 0.3);
+            position: relative;
+            overflow: visible;
+            padding: 6px;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Heart Animation */
+        .heart-icon {
+            animation: heartbeat 2s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10% { transform: scale(1.15); }
+            20% { transform: scale(1); }
+            30% { transform: scale(1.1); }
+            40% { transform: scale(1); }
+        }
+
+        /* Leaf/Plant Animation */
+        .plant-icon {
+            animation: sway 3s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(3deg); }
+            75% { transform: rotate(-3deg); }
+        }
+
+        /* Pulse glow effect on logo */
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--blob-purple));
+            z-index: -1;
+            opacity: 0;
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.05); }
         }
 
         .nav-actions {
@@ -371,7 +426,7 @@
             border: 1px solid var(--glass-border);
             border-radius: 100px;
             font-size: 0.85rem;
-            color: var(--accent-blue-light);
+            color: var(--accent-cyan);
             margin-bottom: 2rem;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -386,13 +441,49 @@
             letter-spacing: -2px;
         }
 
-        .hero h1 .highlight {
+        .hero h1 .static-text {
+            color: #ffffff;
+            display: block;
+        }
+
+        /* Animated Words */
+        .animated-word-container {
+            display: block;
+            height: 1.2em;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .animated-word {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             font-style: italic;
             font-weight: 400;
-            background: linear-gradient(90deg, var(--accent-blue-light), #a78bfa);
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue-light), #a78bfa, var(--blob-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        .animated-word.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .animated-word.exit {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .hero p {
@@ -420,7 +511,7 @@
         .stat-value {
             font-size: 2.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #fff, var(--accent-blue-light));
+            background: linear-gradient(135deg, #fff, var(--accent-cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -481,8 +572,8 @@
 
         .search-box input:focus {
             outline: none;
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(64, 224, 208, 0.15);
         }
 
         .search-box::before {
@@ -519,8 +610,8 @@
 
         .category-pill:hover,
         .category-pill.active {
-            background: var(--accent-blue);
-            border-color: var(--accent-blue);
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            border-color: var(--accent-cyan);
             color: white;
         }
 
@@ -554,9 +645,9 @@
 
         .project-card:hover {
             background: var(--glass-bg-hover);
-            border-color: var(--glass-border-hover);
+            border-color: var(--accent-cyan);
             transform: translateY(-8px);
-            box-shadow: 0 30px 80px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 30px 80px rgba(64, 224, 208, 0.15);
         }
 
         .project-preview {
@@ -652,10 +743,10 @@
 
         .project-tag {
             padding: 0.3rem 0.75rem;
-            background: rgba(59, 130, 246, 0.15);
+            background: rgba(64, 224, 208, 0.15);
             border-radius: 100px;
             font-size: 0.7rem;
-            color: var(--accent-blue-light);
+            color: var(--accent-cyan);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -699,7 +790,7 @@
         }
 
         .add-project-card:hover {
-            border-color: var(--accent-blue);
+            border-color: var(--accent-cyan);
             background: var(--glass-bg-hover);
             transform: translateY(-4px);
         }
@@ -708,14 +799,14 @@
             width: 70px;
             height: 70px;
             border-radius: 20px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--blob-purple));
+            background: linear-gradient(135deg, var(--accent-cyan), var(--blob-purple));
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
             color: white;
             margin-bottom: 1.25rem;
-            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 40px rgba(64, 224, 208, 0.3);
         }
 
         .add-project-card h3 {
@@ -872,8 +963,8 @@
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(64, 224, 208, 0.15);
         }
 
         .modal-footer {
@@ -909,8 +1000,8 @@
 
         .login-info {
             padding: 1rem;
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            background: rgba(64, 224, 208, 0.1);
+            border: 1px solid rgba(64, 224, 208, 0.2);
             border-radius: 12px;
             margin-bottom: 1.5rem;
             font-size: 0.9rem;
@@ -956,7 +1047,7 @@
         ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
 
-        ::selection { background: rgba(59, 130, 246, 0.4); color: white; }
+        ::selection { background: rgba(64, 224, 208, 0.4); color: white; }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -968,6 +1059,7 @@
             .section-header { flex-direction: column; align-items: stretch; }
             .cursor, .cursor-dot { display: none; }
             * { cursor: auto; }
+            .logo { font-size: 1.1rem; }
         }
 
         /* Data indicator */
@@ -1004,7 +1096,75 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="logo">
-            <div class="logo-icon">♾️</div>
+            <div class="logo-icon">
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Heart with animation -->
+                    <g class="heart-icon">
+                        <path d="M32 12 C28 4, 18 4, 18 12 C18 18, 32 24, 32 24 C32 24, 46 18, 46 12 C46 4, 36 4, 32 12Z" 
+                              fill="none" 
+                              stroke="#40E0D0" 
+                              stroke-width="3" 
+                              stroke-linecap="round" 
+                              stroke-linejoin="round"/>
+                    </g>
+                    
+                    <!-- Plant/Leaves with animation -->
+                    <g class="plant-icon">
+                        <path d="M32 24 L32 30" 
+                              stroke="#1a1a2e" 
+                              stroke-width="2.5" 
+                              stroke-linecap="round"/>
+                        <path d="M32 27 C28 25, 26 28, 28 31" 
+                              fill="none" 
+                              stroke="#1a1a2e" 
+                              stroke-width="2.5" 
+                              stroke-linecap="round"/>
+                        <path d="M32 27 C36 25, 38 28, 36 31" 
+                              fill="none" 
+                              stroke="#1a1a2e" 
+                              stroke-width="2.5" 
+                              stroke-linecap="round"/>
+                    </g>
+                    
+                    <!-- Head (open top like a pot/vessel) -->
+                    <path d="M20 32 L20 44 C20 50, 26 54, 32 54 C38 54, 44 50, 44 44 L44 32" 
+                          fill="none" 
+                          stroke="#1a1a2e" 
+                          stroke-width="3.5" 
+                          stroke-linecap="round" 
+                          stroke-linejoin="round"/>
+                    
+                    <!-- Smile -->
+                    <path d="M27 44 C29 46, 35 46, 37 44" 
+                          fill="none" 
+                          stroke="#1a1a2e" 
+                          stroke-width="2.5" 
+                          stroke-linecap="round"/>
+                    
+                    <!-- Neck -->
+                    <path d="M29 54 L29 58 L35 58 L35 54" 
+                          fill="none" 
+                          stroke="#1a1a2e" 
+                          stroke-width="3" 
+                          stroke-linecap="round" 
+                          stroke-linejoin="round"/>
+                    
+                    <!-- Collar/Shoulders hint -->
+                    <path d="M29 58 L22 62 M35 58 L42 62" 
+                          fill="none" 
+                          stroke="#1a1a2e" 
+                          stroke-width="3" 
+                          stroke-linecap="round"/>
+                    
+                    <!-- V-neck detail -->
+                    <path d="M29 58 L32 62 L35 58" 
+                          fill="none" 
+                          stroke="#1a1a2e" 
+                          stroke-width="2" 
+                          stroke-linecap="round" 
+                          stroke-linejoin="round"/>
+                </svg>
+            </div>
             The Conscious Algorithm
         </div>
         <div class="nav-actions">
@@ -1027,10 +1187,19 @@
     <main class="main-content">
         <!-- Hero -->
         <section class="hero">
-            <div class="hero-badge">✨ Creative Space </div>
-            <h1>Let's get<br><span class="highlight">creative.</span></h1>
-            <p>Where Ideas become aware.A personal laboratory of ideas —
-blending logic, creativity, and self-awareness.</p>
+            <div class="hero-badge">✨ Creative Space</div>
+            <h1>
+                <span class="static-text">Let's get</span>
+                <span class="animated-word-container">
+                    <span class="animated-word active">curious.</span>
+                    <span class="animated-word">conscious.</span>
+                    <span class="animated-word">creative.</span>
+                    <span class="animated-word">collaborative.</span>
+                    <span class="animated-word">connected.</span>
+                </span>
+            </h1>
+            <p>Where Ideas become aware. A personal laboratory of ideas —
+blending logic, creativity, and self-awareness </p>
             <div class="stats">
                 <div class="stat">
                     <div class="stat-value" id="totalProjects">0</div>
@@ -1181,16 +1350,12 @@ blending logic, creativity, and self-awareness.</p>
 
     <script>
         // ==========================================
-        // CONFIGURATION - CHANGE THESE VALUES
+        // CONFIGURATION
         // ==========================================
         
-        // Your secret admin key - CHANGE THIS!
         const ADMIN_KEY = 'sai2025';
         
-        // Pre-loaded projects (these will show for everyone)
-        // Add your projects here before deploying
         const DEFAULT_PROJECTS = [
-            // Example project - remove or replace with your own
             {
                 id: 'demo1',
                 name: 'Welcome Demo',
@@ -1217,7 +1382,7 @@ blending logic, creativity, and self-awareness.</p>
 </head>
 <body>
     <div>
-        <h1>👋 Welcome to HTMLHub</h1>
+        <h1>👋 Welcome</h1>
         <p>This is a demo project. Add your own HTML creations!</p>
     </div>
 </body>
@@ -1228,6 +1393,29 @@ blending logic, creativity, and self-awareness.</p>
                 updatedAt: new Date().toISOString()
             }
         ];
+
+        // ==========================================
+        // ANIMATED WORDS
+        // ==========================================
+        
+        const words = document.querySelectorAll('.animated-word');
+        let currentWordIndex = 0;
+
+        function animateWords() {
+            words[currentWordIndex].classList.remove('active');
+            words[currentWordIndex].classList.add('exit');
+
+            currentWordIndex = (currentWordIndex + 1) % words.length;
+
+            setTimeout(() => {
+                words.forEach(word => word.classList.remove('exit'));
+                words[currentWordIndex].classList.add('active');
+            }, 400);
+        }
+
+        setTimeout(() => {
+            setInterval(animateWords, 2500);
+        }, 2000);
 
         // ==========================================
         // APP STATE
@@ -1245,13 +1433,11 @@ blending logic, creativity, and self-awareness.</p>
         // ==========================================
         
         document.addEventListener('DOMContentLoaded', () => {
-            // Check for admin session
             isAdmin = sessionStorage.getItem('htmlhub_admin') === 'true';
             if (isAdmin) {
                 document.body.classList.add('admin-mode');
             }
 
-            // Load projects
             loadProjects();
             renderProjects();
             updateStats();
@@ -1260,12 +1446,10 @@ blending logic, creativity, and self-awareness.</p>
         });
 
         function loadProjects() {
-            // Try to load from localStorage first
             const stored = localStorage.getItem('htmlhub_projects');
             if (stored) {
                 projects = JSON.parse(stored);
             } else {
-                // Use default projects
                 projects = [...DEFAULT_PROJECTS];
                 saveToStorage();
             }
@@ -1663,7 +1847,7 @@ blending logic, creativity, and self-awareness.</p>
             const blob = new Blob([JSON.stringify(projects, null, 2)], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `htmlhub_backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `conscious_algorithm_backup_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             showToast('Exported!', 'success');
         }
