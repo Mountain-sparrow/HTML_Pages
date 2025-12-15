@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Art of Boosting | ML Visual Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-elevated: #1a1a24;
+            --accent-gold: #d4af37;
+            --accent-copper: #b87333;
+            --accent-teal: #2dd4bf;
+            --accent-violet: #8b5cf6;
+            --accent-rose: #f43f5e;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --text-primary: #f8f8f2;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(45, 212, 191, 0.05) 0%, transparent 70%);
+            animation: heroGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroGlow {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-copper), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleReveal 1.5s ease-out;
+        }
+
+        @keyframes titleReveal {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero .subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 300;
+            animation: fadeIn 1.5s ease-out 0.3s both;
+        }
+
+        .hero .tagline {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            color: var(--accent-teal);
+            padding: 0.75rem 1.5rem;
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 50px;
+            display: inline-block;
+            animation: fadeIn 1.5s ease-out 0.6s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Navigation dots */
+        .nav-dots {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-dot:hover, .nav-dot.active {
+            background: var(--accent-gold);
+            transform: scale(1.3);
+        }
+
+        .nav-dot::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-dot:hover::after {
+            opacity: 1;
+        }
+
+        /* Sections */
+        .section {
+            min-height: 100vh;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            font-weight: 700;
+            color: rgba(212, 175, 55, 0.15);
+            line-height: 1;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-top: -2rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Story Cards */
+        .story-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-teal));
+        }
+
+        .story-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .story-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+        }
+
+        /* Metaphor Box */
+        .metaphor-box {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(45, 212, 191, 0.1));
+            border-left: 4px solid var(--accent-violet);
+            padding: 1.5rem 2rem;
+            border-radius: 0 12px 12px 0;
+            margin: 2rem 0;
+        }
+
+        .metaphor-box .label {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-violet);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Visual Comparison Grid */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .comparison-card {
+            background: var(--bg-elevated);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .comparison-card.bagging {
+            border-top: 4px solid var(--accent-blue);
+        }
+
+        .comparison-card.boosting {
+            border-top: 4px solid var(--accent-rose);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .bagging .card-icon {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .boosting .card-icon {
+            background: rgba(244, 63, 94, 0.2);
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            color: var(--accent-teal);
+            font-size: 1.1rem;
+            margin-top: 2px;
+        }
+
+        /* Visual Diagrams */
+        .diagram-container {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .diagram-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--accent-gold);
+        }
+
+        /* Bagging Visual */
+        .bagging-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .data-pool {
+            width: 200px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .parallel-models {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .model-box {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-elevated);
+            border: 2px solid var(--accent-blue);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .model-box:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-gold);
+        }
+
+        .model-box .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .vote-box {
+            width: 150px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-emerald), var(--accent-teal));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .arrow-down {
+            color: var(--accent-gold);
+            font-size: 2rem;
+        }
+
+        /* Boosting Visual */
+        .boosting-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .sequential-flow {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .boost-model {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .boost-box {
+            width: 100px;
+            height: 70px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .boost-box.m1 {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.3), rgba(244, 63, 94, 0.1));
+            border: 2px solid var(--accent-rose);
+        }
+
+        .boost-box.m2 {
+            background: linear-gradient(135deg, rgba(251, 146, 60, 0.3), rgba(251, 146, 60, 0.1));
+            border: 2px solid #fb923c;
+        }
+
+        .boost-box.m3 {
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.3), rgba(250, 204, 21, 0.1));
+            border: 2px solid #facc15;
+        }
+
+        .boost-box.m4 {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(16, 185, 129, 0.1));
+            border: 2px solid var(--accent-emerald);
+        }
+
+        .error-badge {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-top: 0.25rem;
+        }
+
+        .flow-arrow {
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+        }
+
+        .weight-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Algorithm Cards */
+        .algo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .algo-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .algo-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .algo-header {
+            padding: 2rem;
+            position: relative;
+        }
+
+        .algo-card.adaboost .algo-header {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(139, 92, 246, 0.1));
+        }
+
+        .algo-card.gradient .algo-header {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(45, 212, 191, 0.1));
+        }
+
+        .algo-card.xgboost .algo-header {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.1));
+        }
+
+        .algo-badge {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .adaboost .algo-badge {
+            background: rgba(244, 63, 94, 0.3);
+            color: var(--accent-rose);
+        }
+
+        .gradient .algo-badge {
+            background: rgba(16, 185, 129, 0.3);
+            color: var(--accent-emerald);
+        }
+
+        .xgboost .algo-badge {
+            background: rgba(59, 130, 246, 0.3);
+            color: var(--accent-blue);
+        }
+
+        .algo-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .algo-tagline {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .algo-body {
+            padding: 2rem;
+        }
+
+        .algo-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .algo-section-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .algo-section p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .use-case-tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-elevated);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            margin: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        /* Stacking Section */
+        .stacking-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .base-layer {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .base-model {
+            width: 120px;
+            padding: 1.5rem 1rem;
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .base-model:nth-child(1) { border-color: var(--accent-rose); }
+        .base-model:nth-child(2) { border-color: var(--accent-blue); }
+        .base-model:nth-child(3) { border-color: var(--accent-emerald); }
+        .base-model:nth-child(4) { border-color: var(--accent-violet); }
+
+        .base-model:hover {
+            transform: translateY(-5px);
+        }
+
+        .base-model .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .base-model .name {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .meta-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .predictions-box {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(184, 115, 51, 0.1));
+            border: 1px solid var(--accent-gold);
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        .meta-model {
+            width: 180px;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-copper));
+            border-radius: 12px;
+            text-align: center;
+            color: var(--bg-deep);
+            font-weight: 600;
+        }
+
+        .meta-model .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Code Snippet */
+        .code-block {
+            background: #1e1e2e;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .code-header {
+            background: #2a2a3e;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ff5f56; }
+        .code-dot.yellow { background: #ffbd2e; }
+        .code-dot.green { background: #27c93f; }
+
+        .code-title {
+            margin-left: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .code-content pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .code-content .keyword { color: #c678dd; }
+        .code-content .function { color: #61afef; }
+        .code-content .string { color: #98c379; }
+        .code-content .comment { color: #5c6370; }
+        .code-content .number { color: #d19a66; }
+
+        /* Summary Table */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .summary-table th {
+            background: var(--bg-elevated);
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            color: var(--accent-gold);
+        }
+
+        .summary-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+        }
+
+        .summary-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .summary-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .scroll-indicator span {
+            display: block;
+            width: 20px;
+            height: 20px;
+            border-right: 2px solid var(--accent-gold);
+            border-bottom: 2px solid var(--accent-gold);
+            transform: rotate(45deg);
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-dots {
+                display: none;
+            }
+
+            .section {
+                padding: 4rem 1rem;
+            }
+
+            .algo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sequential-flow {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* Animations on scroll */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted var(--accent-gold);
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 1rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--accent-gold);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Dots -->
+    <nav class="nav-dots">
+        <div class="nav-dot active" data-label="Home" onclick="scrollToSection(0)"></div>
+        <div class="nav-dot" data-label="Intro to Boosting" onclick="scrollToSection(1)"></div>
+        <div class="nav-dot" data-label="Bagging vs Boosting" onclick="scrollToSection(2)"></div>
+        <div class="nav-dot" data-label="AdaBoost" onclick="scrollToSection(3)"></div>
+        <div class="nav-dot" data-label="Gradient Boosting" onclick="scrollToSection(4)"></div>
+        <div class="nav-dot" data-label="XGBoost" onclick="scrollToSection(5)"></div>
+        <div class="nav-dot" data-label="Stacking" onclick="scrollToSection(6)"></div>
+        <div class="nav-dot" data-label="Summary" onclick="scrollToSection(7)"></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="section-0">
+        <div class="hero-content">
+            <h1>The Art of Boosting</h1>
+            <p class="subtitle">Where weak learners unite to become an unstoppable force</p>
+            <span class="tagline">// Ensemble Learning Masterclass</span>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- Section 1: Introduction to Boosting -->
+    <section class="section" id="section-1">
+        <div class="section-container">
+            <div class="section-header fade-up">
+                <div class="section-number">01</div>
+                <h2 class="section-title">Introduction to Boosting</h2>
+                <p class="section-subtitle">The philosophy of turning weakness into collective strength</p>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">🎯</div>
+                <h3 class="story-title">The Core Idea</h3>
+                <p>Imagine you're a cricket team captain (IPL style!). You don't have one Virat Kohli who can win every match single-handedly. Instead, you have a team of decent players. <strong>Boosting says:</strong> "What if each player learned specifically from the previous player's mistakes?"</p>
+                
+                <div class="metaphor-box">
+                    <div class="label">💡 The Metaphor</div>
+                    <p><strong>Think of it as a relay race of learning.</strong> The first runner (model) runs and stumbles on certain hurdles. The second runner watches and says, "I'll focus extra hard on those exact hurdles." The third runner learns from both. By the end, the team has mastered every obstacle—not because any single runner was perfect, but because each one specifically addressed the weaknesses of those before.</p>
+                </div>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">🧩</div>
+                <h3 class="story-title">Weak Learners → Strong Ensemble</h3>
+                <p>A <span class="tooltip" data-tip="A model slightly better than random guessing">weak learner</span> is like a student who scores just 51% on every test—barely passing. But here's the magic: combine 100 such students, each learning from the others' mistakes, and suddenly you have a collective genius scoring 95%+.</p>
+                
+                <div class="diagram-container">
+                    <div class="diagram-title">📊 The Boosting Philosophy</div>
+                    <div class="boosting-visual">
+                        <div class="data-pool">📦 Training Data</div>
+                        <div class="arrow-down">⬇️</div>
+                        <div class="sequential-flow">
+                            <div class="boost-model">
+                                <div class="boost-box m1">
+                                    <span class="icon">🌱</span>
+                                    Model 1
+                                    <span class="error-badge">40% error</span>
+                                </div>
+                                <span class="weight-label">w = 0.3</span>
+                            </div>
+                            <span class="flow-arrow">→</span>
+                            <div class="boost-model">
+                                <div class="boost-box m2">
+                                    <span class="icon">🌿</span>
+                                    Model 2
+                                    <span class="error-badge">28% error</span>
+                                </div>
+                                <span class="weight-label">w = 0.4</span>
+                            </div>
+                            <span class="flow-arrow">→</span>
+                            <div class="boost-model">
+                                <div class="boost-box m3">
+                                    <span class="icon">🌳</span>
+                                    Model 3
+                                    <span class="error-badge">15% error</span>
+                                </div>
+                                <span class="weight-label">w = 0.5</span>
+                            </div>
+                            <span class="flow-arrow">→</span>
+                            <div class="boost-model">
+                                <div class="boost-box m4">
+                                    <span class="icon">🏆</span>
+                                    Model N
+                                    <span class="error-badge">5% error</span>
+                                </div>
+                                <span class="weight-label">w = 0.6</span>
+                            </div>
+                        </div>
+                        <div class="arrow-down">⬇️</div>
+                        <div class="vote-box">🎯 Final Prediction</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">⚡</div>
+                <h3 class="story-title">Key Characteristics</h3>
+                <ul class="feature-list">
+                    <li><span class="feature-icon">→</span> <strong>Sequential Learning:</strong> Models are trained one after another, not in parallel</li>
+                    <li><span class="feature-icon">→</span> <strong>Error-Focused:</strong> Each new model pays extra attention to previous mistakes</li>
+                    <li><span class="feature-icon">→</span> <strong>Weighted Combination:</strong> Better performers get more voting power</li>
+                    <li><span class="feature-icon">→</span> <strong>Bias Reduction:</strong> Primarily reduces bias (underfitting), unlike bagging which reduces variance</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Bagging vs Boosting -->
+    <section class="section" id="section-2" style="background: linear-gradient(180deg, var(--bg-deep) 0%, rgba(18, 18, 26, 1) 100%);">
+        <div class="section-container">
+            <div class="section-header fade-up">
+                <div class="section-number">02</div>
+                <h2 class="section-title">Bagging vs Boosting</h2>
+                <p class="section-subtitle">Two philosophies, one goal: ensemble excellence</p>
+            </div>
+
+            <div class="metaphor-box fade-up" style="margin-bottom: 3rem;">
+                <div class="label">🎭 The Restaurant Metaphor</div>
+                <p><strong>Bagging</strong> is like asking 10 different chefs to cook the same dish independently using random ingredients from the pantry, then averaging their recipes. <strong>Boosting</strong> is like one chef cooking, tasting, noting "too salty," then the next chef specifically fixing that, tasting again, noting "needs spice," and so on—each chef fixing the previous one's flaws.</p>
+            </div>
+
+            <div class="comparison-grid fade-up">
+                <div class="comparison-card bagging">
+                    <div class="card-header">
+                        <div class="card-icon">🎲</div>
+                        <h3 class="card-title">Bagging</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;"><em>Bootstrap Aggregating</em></p>
+                    <ul class="feature-list">
+                        <li><span class="feature-icon">∥</span> Models trained in <strong>parallel</strong></li>
+                        <li><span class="feature-icon">🎲</span> Random sampling with replacement</li>
+                        <li><span class="feature-icon">🗳️</span> Equal voting power (democracy)</li>
+                        <li><span class="feature-icon">📉</span> Reduces <strong>variance</strong> (overfitting)</li>
+                        <li><span class="feature-icon">🌲</span> Example: Random Forest</li>
+                        <li><span class="feature-icon">🛡️</span> More robust to noisy data</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-card boosting">
+                    <div class="card-header">
+                        <div class="card-icon">🚀</div>
+                        <h3 class="card-title">Boosting</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;"><em>Sequential Error Correction</em></p>
+                    <ul class="feature-list">
+                        <li><span class="feature-icon">→</span> Models trained <strong>sequentially</strong></li>
+                        <li><span class="feature-icon">⚖️</span> Weighted sampling (hard examples)</li>
+                        <li><span class="feature-icon">👑</span> Weighted voting (meritocracy)</li>
+                        <li><span class="feature-icon">📈</span> Reduces <strong>bias</strong> (underfitting)</li>
+                        <li><span class="feature-icon">🎯</span> Example: XGBoost, AdaBoost</li>
+                        <li><span class="feature-icon">⚠️</span> Can overfit if not careful</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="diagram-container fade-up">
+                <div class="diagram-title">🔄 Visual Comparison</div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2rem;">
+                    <!-- Bagging Visual -->
+                    <div class="bagging-visual">
+                        <div class="data-pool" style="background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));">📦 Full Data</div>
+                        <div style="display: flex; gap: 0.5rem; color: var(--accent-blue);">
+                            <span>↓</span><span>↓</span><span>↓</span><span>↓</span><span>↓</span>
+                        </div>
+                        <div class="parallel-models">
+                            <div class="model-box"><span class="icon">🌲</span>M1</div>
+                            <div class="model-box"><span class="icon">🌲</span>M2</div>
+                            <div class="model-box"><span class="icon">🌲</span>M3</div>
+                            <div class="model-box"><span class="icon">🌲</span>M4</div>
+                            <div class="model-box"><span class="icon">🌲</span>M5</div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; color: var(--accent-blue);">
+                            <span>↓</span><span>↓</span><span>↓</span><span>↓</span><span>↓</span>
+                        </div>
+                        <div class="vote-box" style="background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));">🗳️ Average/Vote</div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">All models equally important</p>
+                    </div>
+
+                    <!-- Boosting Visual -->
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                        <div class="data-pool" style="background: linear-gradient(135deg, var(--accent-rose), var(--accent-copper));">📦 Weighted Data</div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="text-align: center;">
+                                <div class="model-box" style="border-color: var(--accent-rose); width: 60px; height: 60px;"><span class="icon">🌱</span></div>
+                                <span style="font-size: 0.7rem; color: var(--text-muted);">α₁</span>
+                            </div>
+                            <span style="color: var(--accent-rose);">→</span>
+                            <div style="text-align: center;">
+                                <div class="model-box" style="border-color: #fb923c; width: 60px; height: 60px;"><span class="icon">🌿</span></div>
+                                <span style="font-size: 0.7rem; color: var(--text-muted);">α₂</span>
+                            </div>
+                            <span style="color: #fb923c;">→</span>
+                            <div style="text-align: center;">
+                                <div class="model-box" style="border-color: #facc15; width: 60px; height: 60px;"><span class="icon">🌳</span></div>
+                                <span style="font-size: 0.7rem; color: var(--text-muted);">α₃</span>
+                            </div>
+                            <span style="color: #facc15;">→</span>
+                            <div style="text-align: center;">
+                                <div class="model-box" style="border-color: var(--accent-emerald); width: 60px; height: 60px;"><span class="icon">🏆</span></div>
+                                <span style="font-size: 0.7rem; color: var(--text-muted);">α₄</span>
+                            </div>
+                        </div>
+                        <div style="color: var(--accent-emerald);">↓</div>
+                        <div class="vote-box" style="background: linear-gradient(135deg, var(--accent-rose), var(--accent-copper));">⚖️ Weighted Sum</div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">Better models = Higher weight</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: AdaBoost -->
+    <section class="section" id="section-3">
+        <div class="section-container">
+            <div class="section-header fade-up">
+                <div class="section-number">03</div>
+                <h2 class="section-title">AdaBoost</h2>
+                <p class="section-subtitle">Adaptive Boosting — The pioneer that started it all</p>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">👨‍🏫</div>
+                <h3 class="story-title">The Adaptive Teacher</h3>
+                
+                <div class="metaphor-box">
+                    <div class="label">📚 The Classroom Story</div>
+                    <p>Imagine a teacher with 30 students. After the first test, 5 students fail. The teacher doesn't just move on—instead, they give <strong>extra homework and attention to those 5 struggling students</strong>. Next test, 3 of them pass but 2 new students struggle. The teacher adapts again. This is AdaBoost: <strong>adaptive attention to where it's needed most</strong>.</p>
+                </div>
+
+                <h4 style="color: var(--accent-gold); margin: 2rem 0 1rem; font-family: 'Playfair Display', serif;">How It Works</h4>
+                
+                <ol style="list-style: none; counter-reset: steps;">
+                    <li style="padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 1rem;">
+                        <span style="background: var(--accent-rose); color: var(--bg-deep); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">1</span>
+                        <div><strong>Initialize weights equally:</strong> Every data point starts with weight = 1/N. Everyone gets equal attention initially.</div>
+                    </li>
+                    <li style="padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 1rem;">
+                        <span style="background: #fb923c; color: var(--bg-deep); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">2</span>
+                        <div><strong>Train a weak learner:</strong> Build a simple model (usually a decision stump—a tree with just 1 split).</div>
+                    </li>
+                    <li style="padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 1rem;">
+                        <span style="background: #facc15; color: var(--bg-deep); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">3</span>
+                        <div><strong>Calculate model weight (α):</strong> α = ½ × ln((1-error)/error). Lower error → Higher α → More voting power.</div>
+                    </li>
+                    <li style="padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 1rem;">
+                        <span style="background: var(--accent-emerald); color: var(--bg-deep); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">4</span>
+                        <div><strong>Update sample weights:</strong> Misclassified samples get <strong>higher weights</strong> (more attention next round).</div>
+                    </li>
+                    <li style="padding: 1rem 0; display: flex; gap: 1rem;">
+                        <span style="background: var(--accent-teal); color: var(--bg-deep); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">5</span>
+                        <div><strong>Repeat & Combine:</strong> Final prediction = sign(Σ αᵢ × hᵢ(x)). Weighted vote of all learners.</div>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="code-block fade-up">
+                <div class="code-header">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                    <span class="code-title">adaboost_example.py</span>
+                </div>
+                <div class="code-content">
+<pre><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> AdaBoostClassifier
+<span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier
+
+<span class="comment"># Create AdaBoost with decision stumps</span>
+ada_clf = <span class="function">AdaBoostClassifier</span>(
+    estimator=<span class="function">DecisionTreeClassifier</span>(max_depth=<span class="number">1</span>),  <span class="comment"># Stump!</span>
+    n_estimators=<span class="number">50</span>,       <span class="comment"># 50 weak learners</span>
+    learning_rate=<span class="number">1.0</span>,     <span class="comment"># How much each learner contributes</span>
+    algorithm=<span class="string">'SAMME.R'</span>   <span class="comment"># Real-valued boosting (more accurate)</span>
+)
+
+ada_clf.<span class="function">fit</span>(X_train, y_train)
+predictions = ada_clf.<span class="function">predict</span>(X_test)</pre>
+                </div>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">🎯</div>
+                <h3 class="story-title">Real-World Use Cases</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+                    <span class="use-case-tag">👤 Face Detection (Viola-Jones)</span>
+                    <span class="use-case-tag">📧 Spam Filtering</span>
+                    <span class="use-case-tag">🏥 Medical Diagnosis</span>
+                    <span class="use-case-tag">💳 Credit Scoring</span>
+                    <span class="use-case-tag">🔍 Object Recognition</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Gradient Boosting -->
+    <section class="section" id="section-4" style="background: linear-gradient(180deg, var(--bg-deep) 0%, rgba(18, 18, 26, 1) 100%);">
+        <div class="section-container">
+            <div class="section-header fade-up">
+                <div class="section-number">04</div>
+                <h2 class="section-title">Gradient Boosting</h2>
+                <p class="section-subtitle">Learning from residuals — The calculus of improvement</p>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">🎨</div>
+                <h3 class="story-title">The Artist's Refinement</h3>
+                
+                <div class="metaphor-box">
+                    <div class="label">🖼️ The Portrait Story</div>
+                    <p>Imagine painting a portrait. First artist sketches the basic outline—it's rough. Second artist looks at what's <strong>missing</strong> (the residual) and adds facial features. Third artist sees the remaining gaps and adds shading. Fourth adds fine details. Each artist doesn't repaint from scratch—they paint <strong>what's still needed</strong>. That's Gradient Boosting: each model predicts the <strong>residual error</strong> of all previous models combined.</p>
+                </div>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">📐</div>
+                <h3 class="story-title">The Mathematical Intuition</h3>
+                
+                <p style="margin-bottom: 1.5rem;">While AdaBoost adjusts sample <em>weights</em>, Gradient Boosting fits new models to <em>residuals</em> (errors).</p>
+                
+                <div style="background: var(--bg-elevated); padding: 2rem; border-radius: 12px; margin: 1.5rem 0;">
+                    <p style="font-family: 'Fira Code', monospace; text-align: center; font-size: 1.1rem;">
+                        F<sub>m</sub>(x) = F<sub>m-1</sub>(x) + γ × h<sub>m</sub>(x)
+                    </p>
+                    <p style="text-align: center; color: var(--text-secondary); margin-top: 1rem; font-size: 0.9rem;">
+                        New prediction = Previous prediction + (learning rate × correction)
+                    </p>
+                </div>
+
+                <h4 style="color: var(--accent-emerald); margin: 2rem 0 1rem; font-family: 'Playfair Display', serif;">Step-by-Step Process</h4>
+                
+                <div style="display: grid; gap: 1rem;">
+                    <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--accent-emerald);">
+                        <strong style="color: var(--accent-emerald);">Step 1:</strong> Start with a simple prediction (usually the mean for regression)
+                    </div>
+                    <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--accent-teal);">
+                        <strong style="color: var(--accent-teal);">Step 2:</strong> Calculate residuals: r = actual - predicted
+                    </div>
+                    <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--accent-blue);">
+                        <strong style="color: var(--accent-blue);">Step 3:</strong> Train a new tree to predict these residuals
+                    </div>
+                    <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--accent-violet);">
+                        <strong style="color: var(--accent-violet);">Step 4:</strong> Update predictions: new_pred = old_pred + (learning_rate × tree_prediction)
+                    </div>
+                    <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--accent-gold);">
+                        <strong style="color: var(--accent-gold);">Step 5:</strong> Repeat until residuals are tiny or n_estimators reached
+                    </div>
+                </div>
+            </div>
+
+            <div class="diagram-container fade-up">
+                <div class="diagram-title">📈 Gradient Descent in Function Space</div>
+                <div style="text-align: center; padding: 2rem;">
+                    <svg viewBox="0 0 500 200" style="max-width: 100%; height: auto;">
+                        <!-- Loss curve -->
+                        <path d="M 50 150 Q 150 150 200 100 Q 250 50 300 80 Q 350 110 400 70 Q 450 30 480 50" 
+                              fill="none" stroke="url(#gradient1)" stroke-width="3"/>
+                        
+                        <!-- Gradient steps -->
+                        <circle cx="80" cy="148" r="8" fill="#f43f5e"/>
+                        <circle cx="150" cy="130" r="8" fill="#fb923c"/>
+                        <circle cx="220" cy="85" r="8" fill="#facc15"/>
+                        <circle cx="320" cy="95" r="8" fill="#10b981"/>
+                        <circle cx="420" cy="60" r="8" fill="#d4af37"/>
+                        
+                        <!-- Arrows -->
+                        <path d="M 88 145 L 142 133" stroke="#f43f5e" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <path d="M 158 127 L 212 88" stroke="#fb923c" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <path d="M 228 88 L 312 93" stroke="#facc15" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <path d="M 328 92 L 412 63" stroke="#10b981" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        
+                        <!-- Labels -->
+                        <text x="80" y="170" fill="#f43f5e" font-size="10" text-anchor="middle">M1</text>
+                        <text x="150" y="150" fill="#fb923c" font-size="10" text-anchor="middle">M2</text>
+                        <text x="220" y="105" fill="#facc15" font-size="10" text-anchor="middle">M3</text>
+                        <text x="320" y="115" fill="#10b981" font-size="10" text-anchor="middle">M4</text>
+                        <text x="420" y="80" fill="#d4af37" font-size="10" text-anchor="middle">M5</text>
+                        
+                        <text x="250" y="190" fill="#a1a1aa" font-size="12" text-anchor="middle">Each model takes a step down the loss landscape</text>
+                        
+                        <defs>
+                            <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#8b5cf6"/>
+                                <stop offset="100%" style="stop-color:#2dd4bf"/>
+                            </linearGradient>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#d4af37"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="code-block fade-up">
+                <div class="code-header">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                    <span class="code-title">gradient_boosting.py</span>
+                </div>
+                <div class="code-content">
+<pre><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> GradientBoostingClassifier
+
+gb_clf = <span class="function">GradientBoostingClassifier</span>(
+    n_estimators=<span class="number">100</span>,       <span class="comment"># Number of boosting stages</span>
+    learning_rate=<span class="number">0.1</span>,      <span class="comment"># Shrinkage - smaller = more robust</span>
+    max_depth=<span class="number">3</span>,            <span class="comment"># Depth of each tree (controls complexity)</span>
+    min_samples_split=<span class="number">2</span>,    <span class="comment"># Min samples to split a node</span>
+    subsample=<span class="number">0.8</span>,          <span class="comment"># Stochastic GB: use 80% of samples</span>
+    loss=<span class="string">'log_loss'</span>        <span class="comment"># 'log_loss' for classification</span>
+)
+
+gb_clf.<span class="function">fit</span>(X_train, y_train)</pre>
+                </div>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">⚡</div>
+                <h3 class="story-title">AdaBoost vs Gradient Boosting</h3>
+                <table class="summary-table">
+                    <tr>
+                        <th>Aspect</th>
+                        <th>AdaBoost</th>
+                        <th>Gradient Boosting</th>
+                    </tr>
+                    <tr>
+                        <td>What's adjusted?</td>
+                        <td>Sample weights</td>
+                        <td>Residuals (errors)</td>
+                    </tr>
+                    <tr>
+                        <td>Loss function</td>
+                        <td>Exponential loss</td>
+                        <td>Any differentiable loss</td>
+                    </tr>
+                    <tr>
+                        <td>Flexibility</td>
+                        <td>Limited</td>
+                        <td>Highly flexible</td>
+                    </tr>
+                    <tr>
+                        <td>Sensitivity to outliers</td>
+                        <td>Very sensitive</td>
+                        <td>Less sensitive (depends on loss)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: XGBoost -->
+    <section class="section" id="section-5">
+        <div class="section-container">
+            <div class="section-header fade-up">
+                <div class="section-number">05</div>
+                <h2 class="section-title">XGBoost</h2>
+                <p class="section-subtitle">eXtreme Gradient Boosting — The Kaggle Champion</p>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">🏎️</div>
+                <h3 class="story-title">The F1 Racing Car of ML</h3>
+                
+                <div class="metaphor-box">
+                    <div class="label">🏆 The Racing Analogy</div>
+                    <p>If Gradient Boosting is a sports car, <strong>XGBoost is an F1 racing car</strong>. Same fundamental principle (gradient boosting), but with every possible engineering optimization: aerodynamics (regularization), pit stop efficiency (parallel computing), telemetry systems (built-in cross-validation), and fuel management (handling missing values). It's gradient boosting <em>engineered for winning</em>.</p>
+                </div>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">🔧</div>
+                <h3 class="story-title">What Makes XGBoost Special?</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
+                        <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">Parallel Processing</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Tree construction parallelized at the feature level. 10x faster than sklearn's GB.</p>
+                    </div>
+                    
+                    <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🛡️</div>
+                        <h4 style="color: var(--accent-emerald); margin-bottom: 0.5rem;">Built-in Regularization</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">L1 (Lasso) and L2 (Ridge) regularization to prevent overfitting.</p>
+                    </div>
+                    
+                    <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div>
+                        <h4 style="color: var(--accent-violet); margin-bottom: 0.5rem;">Sparse Aware</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Handles missing values elegantly. Learns optimal default directions.</p>
+                    </div>
+                    
+                    <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">✂️</div>
+                        <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">Tree Pruning</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Uses max_depth then prunes backward. More efficient than pre-stopping.</p>
+                    </div>
+                    
+                    <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+                        <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem;">Cross-Validation</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Built-in CV at each iteration. Early stopping when no improvement.</p>
+                    </div>
+                    
+                    <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">💾</div>
+                        <h4 style="color: var(--accent-teal); margin-bottom: 0.5rem;">Cache Optimization</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Out-of-core computing. Can handle datasets larger than RAM.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block fade-up">
+                <div class="code-header">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                    <span class="code-title">xgboost_example.py</span>
+                </div>
+                <div class="code-content">
+<pre><span class="keyword">import</span> xgboost <span class="keyword">as</span> xgb
+
+<span class="comment"># Create DMatrix for XGBoost (optimized data structure)</span>
+dtrain = xgb.<span class="function">DMatrix</span>(X_train, label=y_train)
+dtest = xgb.<span class="function">DMatrix</span>(X_test, label=y_test)
+
+<span class="comment"># XGBoost parameters</span>
+params = {
+    <span class="string">'objective'</span>: <span class="string">'binary:logistic'</span>,  <span class="comment"># Binary classification</span>
+    <span class="string">'max_depth'</span>: <span class="number">6</span>,                    <span class="comment"># Tree depth</span>
+    <span class="string">'learning_rate'</span>: <span class="number">0.1</span>,              <span class="comment"># Step size shrinkage</span>
+    <span class="string">'subsample'</span>: <span class="number">0.8</span>,                  <span class="comment"># Row sampling</span>
+    <span class="string">'colsample_bytree'</span>: <span class="number">0.8</span>,           <span class="comment"># Column sampling per tree</span>
+    <span class="string">'reg_alpha'</span>: <span class="number">0.1</span>,                  <span class="comment"># L1 regularization</span>
+    <span class="string">'reg_lambda'</span>: <span class="number">1.0</span>,                 <span class="comment"># L2 regularization</span>
+    <span class="string">'eval_metric'</span>: <span class="string">'auc'</span>              <span class="comment"># Evaluation metric</span>
+}
+
+<span class="comment"># Train with early stopping</span>
+model = xgb.<span class="function">train</span>(
+    params, dtrain,
+    num_boost_round=<span class="number">1000</span>,
+    evals=[(dtest, <span class="string">'test'</span>)],
+    early_stopping_rounds=<span class="number">50</span>,         <span class="comment"># Stop if no improvement in 50 rounds</span>
+    verbose_eval=<span class="number">100</span>
+)</pre>
+                </div>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">🏅</div>
+                <h3 class="story-title">Why XGBoost Dominates Kaggle</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Here's a secret: ~70% of winning solutions in structured/tabular data competitions use XGBoost or its variants (LightGBM, CatBoost).</p>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="use-case-tag">🏠 House Price Prediction</span>
+                    <span class="use-case-tag">💰 Fraud Detection</span>
+                    <span class="use-case-tag">📈 Stock Prediction</span>
+                    <span class="use-case-tag">🎯 Click-Through Rate</span>
+                    <span class="use-case-tag">🏥 Disease Risk Scoring</span>
+                    <span class="use-case-tag">📊 Customer Churn</span>
+                    <span class="use-case-tag">🔮 Loan Default Prediction</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Stacking -->
+    <section class="section" id="section-6" style="background: linear-gradient(180deg, var(--bg-deep) 0%, rgba(18, 18, 26, 1) 100%);">
+        <div class="section-container">
+            <div class="section-header fade-up">
+                <div class="section-number">06</div>
+                <h2 class="section-title">Stacking</h2>
+                <p class="section-subtitle">Stacked Generalization — The meta-learning orchestra</p>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">🎼</div>
+                <h3 class="story-title">The Orchestra Conductor</h3>
+                
+                <div class="metaphor-box">
+                    <div class="label">🎻 The Symphony Story</div>
+                    <p>Imagine an orchestra: violins 🎻, cellos 🎸, flutes 🎵, drums 🥁 — each instrument plays independently and produces its own interpretation. But there's a <strong>conductor</strong> who listens to all of them and decides how to blend their outputs into the perfect symphony. In stacking: base models are the instruments, and the <strong>meta-learner is the conductor</strong> who learns the optimal combination.</p>
+                </div>
+            </div>
+
+            <div class="diagram-container fade-up">
+                <div class="diagram-title">🏗️ The Stacking Architecture</div>
+                <div class="stacking-visual">
+                    <p style="color: var(--accent-gold); font-family: 'Fira Code', monospace; font-size: 0.85rem;">LEVEL 0: Base Learners (Diverse Models)</p>
+                    <div class="base-layer">
+                        <div class="base-model">
+                            <div class="icon">🌲</div>
+                            <div class="name">Random Forest</div>
+                        </div>
+                        <div class="base-model">
+                            <div class="icon">🚀</div>
+                            <div class="name">XGBoost</div>
+                        </div>
+                        <div class="base-model">
+                            <div class="icon">🧠</div>
+                            <div class="name">Neural Net</div>
+                        </div>
+                        <div class="base-model">
+                            <div class="icon">📐</div>
+                            <div class="name">SVM</div>
+                        </div>
+                    </div>
+                    
+                    <div class="arrow-down">⬇️</div>
+                    
+                    <div class="meta-layer">
+                        <p style="color: var(--text-secondary); font-size: 0.85rem;">Out-of-fold predictions become features</p>
+                        <div class="predictions-box">
+                            [P₁, P₂, P₃, P₄] → New Feature Matrix
+                        </div>
+                        
+                        <div class="arrow-down">⬇️</div>
+                        
+                        <p style="color: var(--accent-gold); font-family: 'Fira Code', monospace; font-size: 0.85rem;">LEVEL 1: Meta-Learner</p>
+                        <div class="meta-model">
+                            <div class="icon">👑</div>
+                            <div class="name">Logistic Regression</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">⚠️</div>
+                <h3 class="story-title">The Critical Rule: Out-of-Fold Predictions</h3>
+                
+                <p style="margin-bottom: 1.5rem;">Here's the catch—you can't just use training predictions! That would cause <strong>data leakage</strong>. Instead:</p>
+                
+                <div style="background: var(--bg-elevated); padding: 2rem; border-radius: 12px; margin: 1.5rem 0;">
+                    <ol style="list-style: decimal; padding-left: 1.5rem;">
+                        <li style="margin-bottom: 1rem;">Split training data into K folds</li>
+                        <li style="margin-bottom: 1rem;">For each fold: train on K-1 folds, predict on the held-out fold</li>
+                        <li style="margin-bottom: 1rem;">Combine all held-out predictions → These become features for meta-learner</li>
+                        <li>This ensures meta-learner trains on "honest" predictions it hasn't seen</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="code-block fade-up">
+                <div class="code-header">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                    <span class="code-title">stacking_example.py</span>
+                </div>
+                <div class="code-content">
+<pre><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> StackingClassifier
+<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier, GradientBoostingClassifier
+<span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC
+<span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression
+
+<span class="comment"># Define base learners (diverse is key!)</span>
+base_learners = [
+    (<span class="string">'rf'</span>, <span class="function">RandomForestClassifier</span>(n_estimators=<span class="number">100</span>)),
+    (<span class="string">'gb'</span>, <span class="function">GradientBoostingClassifier</span>(n_estimators=<span class="number">100</span>)),
+    (<span class="string">'svm'</span>, <span class="function">SVC</span>(probability=<span class="keyword">True</span>))  <span class="comment"># probability=True for soft voting</span>
+]
+
+<span class="comment"># Meta-learner (often simple works best)</span>
+meta_learner = <span class="function">LogisticRegression</span>()
+
+<span class="comment"># Build the stack</span>
+stacking_clf = <span class="function">StackingClassifier</span>(
+    estimators=base_learners,
+    final_estimator=meta_learner,
+    cv=<span class="number">5</span>,                    <span class="comment"># 5-fold cross-validation for base predictions</span>
+    stack_method=<span class="string">'predict_proba'</span>  <span class="comment"># Use probabilities as features</span>
+)
+
+stacking_clf.<span class="function">fit</span>(X_train, y_train)</pre>
+                </div>
+            </div>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">💡</div>
+                <h3 class="story-title">Stacking Pro Tips</h3>
+                <ul class="feature-list">
+                    <li><span class="feature-icon">🎭</span> <strong>Diversity is crucial:</strong> Use very different model types. RF + XGBoost + SVM + KNN beats 4 variations of RF.</li>
+                    <li><span class="feature-icon">👑</span> <strong>Simple meta-learner:</strong> Logistic Regression or Ridge often works best. The meta-learner just needs to learn weights!</li>
+                    <li><span class="feature-icon">📊</span> <strong>Use probabilities:</strong> Pass predict_proba instead of hard predictions for more information.</li>
+                    <li><span class="feature-icon">🏗️</span> <strong>Multi-level stacking:</strong> You can stack stacks! (But diminishing returns after 2 levels)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: Summary -->
+    <section class="section" id="section-7">
+        <div class="section-container">
+            <div class="section-header fade-up">
+                <div class="section-number">07</div>
+                <h2 class="section-title">The Complete Picture</h2>
+                <p class="section-subtitle">When to use what — Your decision framework</p>
+            </div>
+
+            <table class="summary-table fade-up">
+                <tr>
+                    <th>Method</th>
+                    <th>Best For</th>
+                    <th>Strengths</th>
+                    <th>Watch Out For</th>
+                </tr>
+                <tr>
+                    <td><strong style="color: var(--accent-rose);">AdaBoost</strong></td>
+                    <td>Binary classification, simple problems</td>
+                    <td>Easy to understand, no hyperparameter tuning</td>
+                    <td>Sensitive to noisy data & outliers</td>
+                </tr>
+                <tr>
+                    <td><strong style="color: var(--accent-emerald);">Gradient Boosting</strong></td>
+                    <td>Tabular data, flexible loss functions</td>
+                    <td>Versatile, handles various loss functions</td>
+                    <td>Slower training, needs tuning</td>
+                </tr>
+                <tr>
+                    <td><strong style="color: var(--accent-blue);">XGBoost</strong></td>
+                    <td>Competitions, production ML, large datasets</td>
+                    <td>Fast, regularized, handles missing values</td>
+                    <td>Many hyperparameters to tune</td>
+                </tr>
+                <tr>
+                    <td><strong style="color: var(--accent-gold);">Stacking</strong></td>
+                    <td>Maximum performance, diverse model blend</td>
+                    <td>Often best accuracy, flexible architecture</td>
+                    <td>Complex, computationally expensive</td>
+                </tr>
+            </table>
+
+            <div class="story-card fade-up">
+                <div class="story-icon">🎯</div>
+                <h3 class="story-title">Quick Decision Guide</h3>
+                
+                <div style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+                    <div style="background: linear-gradient(90deg, rgba(244, 63, 94, 0.1), transparent); padding: 1rem 1.5rem; border-left: 3px solid var(--accent-rose); border-radius: 0 8px 8px 0;">
+                        <strong>"I need something quick and simple"</strong> → AdaBoost
+                    </div>
+                    <div style="background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), transparent); padding: 1rem 1.5rem; border-left: 3px solid var(--accent-emerald); border-radius: 0 8px 8px 0;">
+                        <strong>"I have a custom loss function"</strong> → Gradient Boosting
+                    </div>
+                    <div style="background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent); padding: 1rem 1.5rem; border-left: 3px solid var(--accent-blue); border-radius: 0 8px 8px 0;">
+                        <strong>"I want the best performance on tabular data"</strong> → XGBoost (or LightGBM/CatBoost)
+                    </div>
+                    <div style="background: linear-gradient(90deg, rgba(212, 175, 55, 0.1), transparent); padding: 1rem 1.5rem; border-left: 3px solid var(--accent-gold); border-radius: 0 8px 8px 0;">
+                        <strong>"I want to squeeze out every last bit of accuracy"</strong> → Stacking
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 4rem; padding: 3rem; background: var(--bg-card); border-radius: 20px;" class="fade-up">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+                <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 1rem;">Ready to Boost?</h3>
+                <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto;">Remember: the goal isn't to memorize algorithms, but to understand <em>when</em> and <em>why</em> each approach works. Start with XGBoost for most problems, and experiment from there!</p>
+                <p style="color: var(--accent-gold); font-family: 'Fira Code', monospace; margin-top: 1.5rem; font-size: 0.9rem;">// Made with 💛 for sAI's ML journey</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Scroll animations
+        const fadeElements = document.querySelectorAll('.fade-up');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        fadeElements.forEach(el => observer.observe(el));
+
+        // Navigation dots
+        const sections = document.querySelectorAll('.section, .hero');
+        const dots = document.querySelectorAll('.nav-dot');
+        
+        function scrollToSection(index) {
+            sections[index].scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        window.addEventListener('scroll', () => {
+            let current = 0;
+            sections.forEach((section, index) => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 300) {
+                    current = index;
+                }
+            });
+            
+            dots.forEach((dot, index) => {
+                dot.classList.remove('active');
+                if (index === current) {
+                    dot.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
